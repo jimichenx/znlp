@@ -45,7 +45,8 @@ class SegmentSnapshotTest {
     @Test
     void sharedSegmenterAgreesAcrossThreads() throws Exception {
         List<Case> cases = cases();
-        try (ExecutorService pool = Executors.newFixedThreadPool(4)) {
+        ExecutorService pool = Executors.newFixedThreadPool(4);
+        try {
             List<Future<String>> futures = new ArrayList<>();
             for (int round = 0; round < 8; round++) {
                 for (int i = 0; i < cases.size(); i++) {
@@ -57,6 +58,8 @@ class SegmentSnapshotTest {
                 Case item = cases.get(i % cases.size());
                 assertEquals(format(item.segmenter, item.text), futures.get(i).get());
             }
+        } finally {
+            pool.shutdown();
         }
     }
 
