@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="znlp">
+  <defs>
+    <linearGradient id="znlp-bg" x1="3" y1="1" x2="30" y2="31" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1784d4"/>
+      <stop offset="1" stop-color="#0c7a84"/>
+    </linearGradient>
+    <mask id="znlp-cut" maskUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#fff"/>
+      <rect x="14.15" y="11.15" width="3.7" height="9.7" fill="#000" transform="rotate(139 16 16)"/>
+    </mask>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#znlp-bg)"/>
+  <path d="M8.15 9.15h15.7L8.15 22.85h15.7" fill="none" stroke="#fff" stroke-width="4.7" stroke-linecap="round" stroke-linejoin="round" mask="url(#znlp-cut)"/>
+</svg>

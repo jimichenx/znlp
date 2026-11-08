@@ -1,0 +1,9 @@
+# znlp system module configuration file
+# Each line contains a fully qualified name of a module class
+# Lines starting with # are comments and will be ignored
+# 
+dev.znlp.CoreModule
+dev.znlp.segment.SegmentModule
+dev.znlp.pinyin.PinyinModule
+dev.znlp.highlight.HighlightModule
+dev.znlp.converter.TransModule

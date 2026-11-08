@@ -1,0 +1,83 @@
+---
+interface Props {
+  title: string;
+  eyebrow?: string;
+  reverse?: boolean;
+  framed?: boolean;
+}
+
+const { title, eyebrow, reverse = false, framed = false } = Astro.props;
+---
+
+<section class:list={['split', { reverse }]}>
+  <div class="copy">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h2>{title}</h2>
+    <slot />
+  </div>
+  <div class:list={['visual', { framed }]}>
+    <slot name="visual" />
+  </div>
+</section>
+
+<style>
+  .split {
+    display: grid;
+    gap: 1.75rem 3.5rem;
+    align-items: start;
+    margin-block: 3.25rem;
+  }
+
+  @media (min-width: 60rem) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    }
+
+    .split.reverse .visual {
+      order: -1;
+    }
+  }
+
+  .copy h2 {
+    margin: 0;
+    font-size: var(--sl-text-h2);
+    line-height: 1.25;
+  }
+
+  .copy :global(p) {
+    margin-top: 1.25rem;
+  }
+
+  .copy :global(ul) {
+    margin-top: 1.25rem;
+    padding-inline-start: 1.25rem;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.75rem;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--sl-color-accent);
+  }
+
+  .visual {
+    min-width: 0;
+  }
+
+  .visual.framed {
+    padding: 1rem 1rem 0.85rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.9rem;
+    background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+  }
+
+  .visual :global(pre) {
+    margin: 0;
+  }
+
+  /* 示例代码是演示而非参考，字号略收，避免长行横向滚动 */
+  .visual :global(.expressive-code pre) {
+    font-size: 0.82rem;
+  }
+</style>

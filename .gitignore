@@ -1,0 +1,53 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+
+# Package Files
+*.jar
+*.war
+*.ear
+# *.zip
+*.tar.gz
+*.rar
+
+.vscode/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+**/out
+**/bin
+**/temp/
+data/
+/data_dir/
+**/data/
+example.data
+/doc
+
+
+/dependency-reduced-pom.xml
+*.iml
+/.idea
+*.iws
+
+/.gradle
+**/*.iml
+*.ipr
+
+/temp/
+/testdata/
+!/gradle/wrapper/gradle-wrapper.jar
+
+### macOS template
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+# Thumbnails
+._*
+
+*.bin
+!**/cws-model/parameter.bin

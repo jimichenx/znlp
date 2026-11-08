@@ -1,0 +1,126 @@
+---
+/**
+ * 首页右侧的分词结果卡。
+ * 词和词性与 SegmentSnapshotTest 的 standard/typical 锁定结果一致，不要随手改。
+ */
+const tokens = [
+  ['自然', 'a'],
+  ['语言', 'n'],
+  ['处理', 'v'],
+  ['技术', 'n'],
+  ['是', 'v'],
+  ['人工智能', 'n'],
+  ['的', 'u'],
+  ['重要', 'a'],
+  ['领域', 'n'],
+];
+---
+
+<figure class="preview">
+  <figcaption class="bar">
+    <span class="mark" aria-hidden="true"></span>
+    <span>Znlp.segment()</span>
+  </figcaption>
+  <div class="body">
+    <p class="label">输入</p>
+    <p class="src">自然语言处理技术是人工智能的重要领域</p>
+    <p class="label">输出</p>
+    <ul>
+      {
+        tokens.map(([word, nature]) => (
+          <li>
+            {word}
+            <b>{nature}</b>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <p class="foot">标准配方 · 词典与二元语法 · 带词性</p>
+</figure>
+
+<style>
+  .preview {
+    margin: 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.9rem;
+    background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+    box-shadow: 0 16px 40px color-mix(in srgb, var(--sl-color-gray-1) 8%, transparent);
+    overflow: hidden;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    font-family: var(--sl-font-mono);
+    font-size: 0.78rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .mark {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 0.15rem;
+    background: var(--sl-color-accent);
+  }
+
+  .body {
+    padding: 1rem 1.05rem 1.1rem;
+  }
+
+  .label {
+    margin: 0 0 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--sl-color-gray-3);
+  }
+
+  .src {
+    margin: 0 0 0.95rem;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--sl-color-white);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    padding: 0.28rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    background: var(--sl-color-black);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--sl-color-white);
+  }
+
+  b {
+    font-family: var(--sl-font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--sl-color-accent);
+  }
+
+  .foot {
+    margin: 0;
+    padding: 0.65rem 1.05rem 0.8rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+  }
+</style>

@@ -1,0 +1,158 @@
+/* ZapNLP 文档站样式覆盖 */
+
+:root {
+  --sl-font: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    'Noto Sans CJK SC', 'Source Han Sans SC', sans-serif;
+  --sl-font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas,
+    'PingFang SC', monospace;
+
+  /* 品牌色：电光蓝 → 青 */
+  --sl-color-accent-low: #d6ecff;
+  --sl-color-accent: #0a6fbf;
+  --sl-color-accent-high: #06335c;
+}
+
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #06335c;
+  --sl-color-accent: #5cb3ff;
+  --sl-color-accent-high: #d6ecff;
+}
+
+/* 中文正文排版：行距略放宽，段落间距更明显 */
+.sl-markdown-content {
+  line-height: 1.85;
+}
+
+.sl-markdown-content p,
+.sl-markdown-content li {
+  /* 中英文混排时避免过度拉伸 */
+  text-align: left;
+}
+
+/* 行内代码在中文语境下不需要左右留白过大 */
+.sl-markdown-content :not(pre) > code {
+  padding-inline: 0.25em;
+}
+
+/* 表格：API 参考里表格很宽，允许横向滚动 */
+.sl-markdown-content table {
+  display: table;
+  width: 100%;
+}
+
+/* 首页（落地页）：内容区加宽到近满宽，只留很小的左右页边距；超宽屏用 86rem 封顶。
+   只在 ≥72rem 生效——Starlight 从 72rem 起才给 .sl-container 加 margin-inline: auto
+   （ContentPanel.astro），更窄的断点套用会让内容左对齐、右侧留下空白。 */
+@media (min-width: 72rem) {
+  body:has(.landing) {
+    --sl-content-width: min(86rem, 100% - 4rem);
+  }
+
+  /* 首页栅格：宽屏下增加列数，卡片不会因为内容区变宽而被拉得过长 */
+  .grid-features .card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-deploy .card-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.landing-block > h2 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.landing-block > p {
+  max-width: 40rem;
+  margin-top: 0;
+  margin-bottom: 1.15rem;
+  color: var(--sl-color-gray-2);
+}
+
+.grid-features {
+  margin-top: 0.25rem;
+}
+
+.grid-features .card {
+  position: relative;
+  border-radius: 0.75rem;
+  padding: 1.15rem 1.25rem 1.2rem;
+  --sl-card-border: var(--sl-color-accent);
+  --sl-card-bg: var(--sl-color-accent-low);
+  transition: border-color 0.15s ease;
+}
+
+.grid-features .card:hover {
+  border-color: var(--sl-color-accent);
+}
+
+.grid-features .card .body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--sl-color-gray-2);
+}
+
+.grid-features .card .body p {
+  margin: 0;
+}
+
+.grid-features .card .more {
+  display: flex;
+  width: fit-content;
+  margin-top: 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sl-color-accent);
+  text-decoration: none;
+}
+
+.grid-features .card .more::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.grid-deploy {
+  margin-top: 0.25rem;
+}
+
+.grid-deploy .sl-link-card {
+  height: 100%;
+  border-radius: 0.75rem;
+}
+
+.landing-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.35rem;
+}
+
+.landing-cta-final {
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.landing-final {
+  margin-top: 3.5rem;
+  padding: 2.25rem 1.5rem 2rem;
+  text-align: center;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--sl-color-accent) 8%, transparent), transparent 70%),
+    var(--sl-color-gray-7, var(--sl-color-gray-6));
+}
+
+.landing-final h2 {
+  margin-top: 0;
+}
+
+.landing-final .lead,
+.landing-final p {
+  max-width: 36rem;
+  margin-inline: auto;
+  text-align: center;
+  color: var(--sl-color-gray-2);
+}

@@ -1,0 +1,5 @@
+znlp-resources/src/main/**/*.model filter=lfs diff=lfs merge=lfs -text
+znlp-resources/src/main/**/CoreDict.bigram.txt filter=lfs diff=lfs merge=lfs -text
+znlp-resources/src/main/**/CoreDict.txt filter=lfs diff=lfs merge=lfs -text
+znlp-resources/src/main/resources/znlp/cws-model/feature.dat filter=lfs diff=lfs merge=lfs -text
+/znlp-resources/src/main/resources/znlp/cws-model/parameter.bin filter=lfs diff=lfs merge=lfs -text

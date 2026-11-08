@@ -1,0 +1,169 @@
+---
+title: znlp
+description: 模块化的 Java 中文 NLP 工具包，提供分词、词性标注、命名实体识别、拼音、繁简转换、新词发现与智能高亮能力。
+template: splash
+prev: false
+next: false
+hero:
+  title: znlp
+  tagline: 纯 Java 的模块化中文 NLP 工具包。分词、词性、实体和拼音按需组合，也可以完全离线运行。
+  actions:
+    - text: 快速开始
+      link: getting-started/quick-start/
+      icon: right-arrow
+      variant: primary
+    - text: 安装与依赖
+      link: getting-started/installation/
+      icon: document
+      variant: secondary
+    - text: 代码示例
+      link: reference/examples/
+      icon: open-book
+      variant: minimal
+---
+
+import SplitSection from '../../components/SplitSection.astro';
+import PipelineDiagram from '../../components/diagrams/PipelineDiagram.astro';
+import PerceptronDiagram from '../../components/diagrams/PerceptronDiagram.astro';
+import { Card, CardGrid, Code, LinkButton, LinkCard } from '@astrojs/starlight/components';
+
+<div class="landing">
+
+<div class="landing-block">
+
+## 能做什么
+
+分词、标注、拼音和结构化解析可以单独调用。要换切分路径时，用配方把阶段拼起来。
+
+<div class="grid-features">
+
+<CardGrid>
+  <Card title="可组合的分词配方" icon="puzzle">
+    词典与二元语法是默认路径。需要时再接上感知机分词或用户词典。
+    <a class="more" href="guides/segmentation/">中文分词</a>
+  </Card>
+  <Card title="感知机统一框架" icon="approve-check">
+    分词、词性、实体、人名和拼音切分共用一套模型，可以用自己的语料替换。
+    <a class="more" href="guides/perceptron/">感知机框架</a>
+  </Card>
+  <Card title="结构化解析" icon="clock">
+    抽出数字、金额、时间和电话。相对时间按给定的参考时间归一。
+    <a class="more" href="guides/duckling/">Duckling</a>
+  </Card>
+  <Card title="拼音与繁简" icon="translate">
+    全拼、首字母、音节切分，以及简体和繁体的双向转换。
+    <a class="more" href="guides/pinyin/">拼音</a>
+  </Card>
+  <Card title="新词发现与高亮" icon="star">
+    用互信息和信息熵找新词。搜索结果可以按拼音或模糊匹配标红。
+    <a class="more" href="guides/new-word-discovery/">新词发现</a>
+  </Card>
+  <Card title="离线也能部署" icon="setting">
+    配置和组件生命周期集中管理。资源可以自动下载，也可以完全离线分发。
+    <a class="more" href="deployment/configuration/">配置与数据目录</a>
+  </Card>
+</CardGrid>
+
+</div>
+
+</div>
+
+<SplitSection eyebrow="快速上手" title="几行代码就能分词">
+
+`Znlp` 静态门面覆盖绝大多数场景——分词、拼音、繁简转换、结构化解析，全部通过静态方法完成，不需要接触 `ZnlpSystem` 的生命周期。
+
+需要感知机分词、用户词典或 NER 时，再用 `SegmentRecipe` 按阶段拼装出想要的 `WordSegmenter`。
+
+首次运行会把词典与模型解析成 `data/cache/` 缓存（二元语法表约 40 MB），之后启动直接读缓存，缓存目录可配置。
+
+<Fragment slot="visual">
+
+<Code
+  lang="java"
+  code={`import dev.znlp.Znlp;
+import segment.dev.znlp.Token;
+
+String text = "自然语言处理技术是人工智能的重要领域";
+List<Token> tokens = Znlp.segment(text);
+for (Token token : tokens) {
+    System.out.println(token); // 输出 word/nature
+}`}
+/>
+
+</Fragment>
+
+</SplitSection>
+
+<SplitSection eyebrow="核心能力" title="分阶段的分词流水线" reverse framed>
+
+- 默认配方 `standard()`：核心词典与候选来源铺候选，二元语法做 Viterbi 选路，再叠人名识别与词性标注，每个阶段都可以独立开关。
+- 只要切词和吞吐用 `dictionary()`；要用统计模型分词用 `perceptron()`——线性路径，不跑二元语法。
+- 用户词典和纠错词典都在选路之后合并，不参与 Viterbi；纠错词典优先级更高。
+
+<Fragment slot="visual">
+  <PipelineDiagram />
+</Fragment>
+
+</SplitSection>
+
+<SplitSection eyebrow="可训练的模型层" title="一套感知机框架，五个任务" framed>
+
+- 中文分词、词性标注、命名实体、人名识别、拼音音节切分，都建立在同一套感知机框架上（`dev.znlp.perceptron`）。
+- 实现 `PerceptronInstance` 即可接入自己的语料（字符级任务继承 `CharBasedPerceptronInstance`），交给 `PerceptronTrainer` 训练。
+- 训练产物可以压缩、落盘，或转成运行时模型；`PosPerceptron.train` 是最清晰的完整范例。
+
+<Fragment slot="visual">
+  <PerceptronDiagram />
+</Fragment>
+
+</SplitSection>
+
+<div class="landing-block">
+
+## 工程落地
+
+从缓存目录到离线部署，上生产前要确认的几件事：
+
+<div class="grid-deploy">
+
+<CardGrid>
+  <LinkCard
+    title="配置与数据目录"
+    description="配置加载顺序、全部配置项、多数据目录机制与模块开关。"
+    href="deployment/configuration/"
+  />
+  <LinkCard
+    title="资源下载与离线部署"
+    description="模型与词典的分发方式，以及自动下载机制的已知缺陷。"
+    href="deployment/resources/"
+  />
+  <LinkCard
+    title="Spring Boot 集成"
+    description="单例持有分词器、资源打包、容器内存与启动预热。"
+    href="deployment/spring-boot/"
+  />
+  <LinkCard
+    title="性能与基准测试"
+    description="JMH 基准怎么跑，以及不同分词配方之间怎么选。"
+    href="deployment/benchmarks/"
+  />
+</CardGrid>
+
+</div>
+
+</div>
+
+<div class="landing-final">
+
+## 开始使用
+
+<p class="lead">JDK 17 及以上，没有强制的运行时依赖，词典和模型可以随应用离线分发。</p>
+
+<div class="landing-cta landing-cta-final">
+  <LinkButton href="getting-started/quick-start/" variant="primary" icon="right-arrow">快速开始</LinkButton>
+  <LinkButton href="getting-started/installation/" variant="secondary" icon="document">安装与依赖</LinkButton>
+</div>
+
+</div>
+
+</div>

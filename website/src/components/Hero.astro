@@ -1,0 +1,163 @@
+---
+import { Image } from 'astro:assets';
+import DraftContentNotice from 'virtual:starlight/components/DraftContentNotice';
+import { LinkButton } from '@astrojs/starlight/components';
+import SegmentPreview from './SegmentPreview.astro';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { title = data.title, tagline, image, actions = [] } = data.hero || {};
+
+const imageAttrs = {
+  loading: 'eager' as const,
+  decoding: 'async' as const,
+  width: 400,
+  height: 400,
+  alt: image?.alt || '',
+};
+
+let darkImage: ImageMetadata | undefined;
+let lightImage: ImageMetadata | undefined;
+let rawHtml: string | undefined;
+if (image) {
+  if ('file' in image) {
+    darkImage = image.file;
+  } else if ('dark' in image) {
+    darkImage = image.dark;
+    lightImage = image.light;
+  } else {
+    rawHtml = image.html;
+  }
+}
+
+const showPreview = !darkImage && !lightImage && !rawHtml;
+---
+
+<div class:list={['hero', { 'has-visual': showPreview || darkImage || lightImage || rawHtml }]}>
+  <div class="sl-flex stack">
+    <div class="sl-flex copy">
+      <p class="kicker">中文自然语言处理</p>
+      <h1 id="_top" data-page-title set:html={title} />
+      {data.draft && <DraftContentNotice />}
+      {tagline && <p class="tagline" set:html={tagline} />}
+    </div>
+    {
+      actions.length > 0 && (
+        <div class="sl-flex actions">
+          {actions.map(
+            ({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+              <LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
+                {text}
+                {icon?.html && <Fragment set:html={icon.html} />}
+              </LinkButton>
+            )
+          )}
+        </div>
+      )
+    }
+  </div>
+  {
+    showPreview && (
+      <div class="hero-visual">
+        <SegmentPreview />
+      </div>
+    )
+  }
+  {
+    darkImage && (
+      <Image src={darkImage} {...imageAttrs} class:list={{ 'light:sl-hidden': Boolean(lightImage) }} />
+    )
+  }
+  {lightImage && <Image src={lightImage} {...imageAttrs} class="dark:sl-hidden" />}
+  {rawHtml && <div class="hero-html" set:html={rawHtml} />}
+</div>
+
+<style>
+  .hero {
+    display: grid;
+    align-items: center;
+    gap: 1.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .stack {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    align-items: center;
+  }
+
+  .copy {
+    flex-direction: column;
+    gap: 0.85rem;
+    align-items: center;
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--sl-color-accent);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.6rem, 4.2vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+
+  .tagline {
+    margin: 0;
+    max-width: 34rem;
+    font-size: clamp(1rem, 0.4vw + 0.95rem, 1.15rem);
+    line-height: 1.7;
+    text-wrap: pretty;
+    color: var(--sl-color-gray-2);
+  }
+
+  .actions {
+    gap: 0.75rem 0.85rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-visual {
+    min-width: 0;
+  }
+
+  .hero > img,
+  .hero > .hero-html {
+    object-fit: contain;
+    width: min(100%, 25rem);
+    height: auto;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 50rem) {
+    .hero.has-visual {
+      grid-template-columns: minmax(0, 1.08fr) minmax(17rem, 0.92fr);
+      gap: clamp(2rem, 4vw, 4.5rem);
+      padding-block: 2.75rem 1.25rem;
+    }
+
+    .stack,
+    .copy {
+      align-items: flex-start;
+      text-align: start;
+    }
+
+    .actions {
+      justify-content: flex-start;
+    }
+
+    .hero > img,
+    .hero > .hero-html {
+      order: 2;
+      width: min(100%, 25rem);
+      margin-inline: 0 0;
+      justify-self: end;
+    }
+  }
+</style>
