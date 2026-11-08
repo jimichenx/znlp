@@ -1,0 +1,208 @@
+---
+import { Image } from 'astro:assets';
+import segment from '../assets/landing/znlp-icon-recipe.jpg';
+import perceptron from '../assets/landing/znlp-icon-perceptron.jpg';
+import duckling from '../assets/landing/znlp-icon-duckling.jpg';
+import pinyin from '../assets/landing/znlp-icon-pinyin.jpg';
+import discover from '../assets/landing/znlp-icon-discover.jpg';
+import offline from '../assets/landing/znlp-icon-offline.jpg';
+
+const items = [
+  {
+    title: '可组合的分词配方',
+    text: '词典与二元语法是默认路径。需要时再接上感知机分词或用户词典。',
+    href: 'guides/segmentation/',
+    more: '中文分词',
+    image: segment,
+    layout: 'wide',
+  },
+  {
+    title: '感知机统一框架',
+    text: '分词、词性、实体、人名和拼音切分共用一套模型，可以用自己的语料替换。',
+    href: 'guides/perceptron/',
+    more: '感知机框架',
+    image: perceptron,
+    layout: 'card',
+  },
+  {
+    title: '结构化解析',
+    text: '抽出数字、金额、时间和电话。相对时间按给定的参考时间归一。',
+    href: 'guides/duckling/',
+    more: 'Duckling',
+    image: duckling,
+    layout: 'card',
+  },
+  {
+    title: '拼音与繁简',
+    text: '全拼、首字母、音节切分，以及简体和繁体的双向转换。',
+    href: 'guides/pinyin/',
+    more: '拼音',
+    image: pinyin,
+    layout: 'card',
+  },
+  {
+    title: '新词发现与高亮',
+    text: '用互信息和信息熵找新词。搜索结果可以按拼音或模糊匹配标红。',
+    href: 'guides/new-word-discovery/',
+    more: '新词发现',
+    image: discover,
+    layout: 'card',
+  },
+  {
+    title: '离线也能部署',
+    text: '配置和组件生命周期集中管理。资源可以自动下载，也可以完全离线分发。',
+    href: 'deployment/configuration/',
+    more: '配置与数据目录',
+    image: offline,
+    layout: 'banner',
+  },
+];
+---
+
+<ul class="cap-grid">
+  {
+    items.map((item) => (
+      <li class={item.layout}>
+        <a href={item.href}>
+          <div class="art">
+            <Image src={item.image} alt="" widths={[480, 800, 1200]} sizes="(min-width: 72rem) 36rem, 100vw" />
+          </div>
+          <div class="copy">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <span class="more">{item.more}</span>
+          </div>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .cap-grid {
+    display: grid;
+    gap: 0.9rem;
+    margin: 1.35rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cap-grid a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+    background: var(--sl-color-black);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      border-color 0.18s ease,
+      transform 0.18s ease;
+  }
+
+  .cap-grid a:hover {
+    border-color: var(--sl-color-accent);
+    transform: translateY(-2px);
+  }
+
+  .art {
+    position: relative;
+    overflow: hidden;
+    background: #071422;
+    aspect-ratio: 16 / 10;
+  }
+
+  .art :global(img) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: none;
+    transition: transform 0.45s ease;
+  }
+
+  .cap-grid a:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin: 0;
+    min-width: 0;
+    padding: 1rem 1.1rem 1.05rem;
+  }
+
+  .copy h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: var(--sl-color-white);
+  }
+
+  .copy p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--sl-color-gray-2);
+  }
+
+  .more {
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--sl-color-accent);
+  }
+
+  .more::after {
+    content: ' →';
+  }
+
+  @media (min-width: 50rem) {
+    .cap-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .wide {
+      grid-column: span 2;
+    }
+
+    .wide a,
+    .banner a {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+      align-items: stretch;
+    }
+
+    .wide .art,
+    .banner .art {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 12.5rem;
+      aspect-ratio: auto;
+    }
+
+    .banner {
+      grid-column: 1 / -1;
+    }
+
+    .banner a {
+      grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.75fr);
+    }
+
+    .wide .copy,
+    .banner .copy {
+      justify-content: center;
+      padding: 1.35rem 1.5rem;
+    }
+  }
+</style>

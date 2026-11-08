@@ -1,137 +1,220 @@
 ---
+/**
+ * 分词两条路径。阶段和约束与 SegmentRecipe 的说明一致。
+ */
+const standard = [
+  ['输入文本', '字符串 · char[]'],
+  ['候选铺图', '核心词典 · 规则'],
+  ['Viterbi 选路', '二元语法'],
+  ['人名 · 词性', '可独立开关'],
+  ['Token 流', '流式 · 列表'],
+];
+
+const perceptron = [
+  ['输入文本', '字符串 · char[]'],
+  ['CWS 边界判定', '感知机'],
+  ['原子补洞', ''],
+  ['Token 流', '流式 · 列表'],
+];
+
+const after = ['用户词典：选路后合并', '纠错词典：优先级更高', 'indexTerms()：附索引子词'];
 ---
 
-<figure class="diagram">
-  <svg viewBox="0 0 520 284" role="img" aria-labelledby="pipeline-diagram-title">
-    <title id="pipeline-diagram-title">ZapNLP 分词流水线：词典配方与感知机配方两条路径</title>
+<figure class="pipe-diagram">
+  <p class="sr" id="pipeline-diagram-title">分词流水线：standard 走词典与 Viterbi，perceptron 走线性边界判定</p>
 
-    <text class="label" x="8" y="14">SegmentRecipe.standard()</text>
+  <section class="lane">
+    <header>
+      <span>默认路径</span>
+      <b>SegmentRecipe.standard()</b>
+    </header>
+    <ol class="steps">
+      {
+        standard.map(([name, detail]) => (
+          <li>
+            <strong>{name}</strong>
+            {detail && <small>{detail}</small>}
+          </li>
+        ))
+      }
+    </ol>
+  </section>
 
-    <rect class="box" x="6" y="24" width="94" height="52" rx="10" />
-    <text class="t" x="53" y="49" text-anchor="middle">输入文本</text>
-    <text class="t-sm" x="53" y="65" text-anchor="middle">字符串 · char[]</text>
+  <section class="lane alt">
+    <header>
+      <span>线性路径</span>
+      <b>SegmentRecipe.perceptron()</b>
+    </header>
+    <ol class="steps">
+      {
+        perceptron.map(([name, detail]) => (
+          <li>
+            <strong>{name}</strong>
+            {detail && <small>{detail}</small>}
+          </li>
+        ))
+      }
+    </ol>
+    <p class="aside">不跑二元语法，也不经 Viterbi 选路</p>
+  </section>
 
-    <rect class="box" x="109.5" y="24" width="94" height="52" rx="10" />
-    <text class="t" x="156.5" y="49" text-anchor="middle">候选铺图</text>
-    <text class="t-sm" x="156.5" y="65" text-anchor="middle">核心词典 · 规则</text>
-
-    <rect class="box" x="213" y="24" width="94" height="52" rx="10" />
-    <text class="t" x="260" y="49" text-anchor="middle">Viterbi 选路</text>
-    <text class="t-sm" x="260" y="65" text-anchor="middle">二元语法</text>
-
-    <rect class="box" x="316.5" y="24" width="94" height="52" rx="10" />
-    <text class="t" x="363.5" y="49" text-anchor="middle">人名 · 词性</text>
-    <text class="t-sm" x="363.5" y="65" text-anchor="middle">可独立开关</text>
-
-    <rect class="box" x="420" y="24" width="94" height="52" rx="10" />
-    <text class="t" x="467" y="49" text-anchor="middle">Token 流</text>
-    <text class="t-sm" x="467" y="65" text-anchor="middle">流式 · 列表</text>
-
-    <path class="arrow" d="M101.5 45.5 L107.5 50 L101.5 54.5" />
-    <path class="arrow" d="M205 45.5 L211 50 L205 54.5" />
-    <path class="arrow" d="M308.5 45.5 L314.5 50 L308.5 54.5" />
-    <path class="arrow" d="M412 45.5 L418 50 L412 54.5" />
-
-    <rect class="panel" x="6" y="96" width="508" height="100" rx="12" />
-    <text class="label" x="18" y="116">SegmentRecipe.perceptron()</text>
-
-    <rect class="box-fill" x="16" y="126" width="110" height="46" rx="10" />
-    <text class="t" x="71" y="145" text-anchor="middle">输入文本</text>
-    <text class="t-sm" x="71" y="161" text-anchor="middle">字符串 · char[]</text>
-
-    <rect class="box-fill" x="142" y="126" width="110" height="46" rx="10" />
-    <text class="t" x="197" y="145" text-anchor="middle">CWS 边界判定</text>
-    <text class="t-sm" x="197" y="161" text-anchor="middle">感知机</text>
-
-    <rect class="box-fill" x="268" y="126" width="110" height="46" rx="10" />
-    <text class="t" x="323" y="145" text-anchor="middle">原子补洞</text>
-
-    <rect class="box-fill" x="394" y="126" width="110" height="46" rx="10" />
-    <text class="t" x="449" y="145" text-anchor="middle">Token 流</text>
-    <text class="t-sm" x="449" y="161" text-anchor="middle">流式 · 列表</text>
-
-    <path class="arrow" d="M127.5 144.5 L133.5 149 L127.5 153.5" />
-    <path class="arrow" d="M253.5 144.5 L259.5 149 L253.5 153.5" />
-    <path class="arrow" d="M379.5 144.5 L385.5 149 L379.5 153.5" />
-
-    <text class="muted" x="18" y="186">线性路径：不跑二元语法，也不经 Viterbi 选路</text>
-
-    <rect class="chip" x="30" y="212" width="140" height="30" rx="15" />
-    <text class="muted" x="100" y="231" text-anchor="middle">用户词典：选路后合并</text>
-
-    <rect class="chip" x="184" y="212" width="140" height="30" rx="15" />
-    <text class="muted" x="254" y="231" text-anchor="middle">纠错词典：优先级更高</text>
-
-    <rect class="chip" x="338" y="212" width="152" height="30" rx="15" />
-    <text class="muted" x="414" y="231" text-anchor="middle">indexTerms()：附索引子词</text>
-
-    <text class="muted" x="10" y="264">build() 一次，PipelineSegmenter 线程安全，可作单例全局复用</text>
-  </svg>
+  <ul class="after">
+    {after.map((item) => <li>{item}</li>)}
+  </ul>
+  <p class="foot">build() 一次。PipelineSegmenter 线程安全，可作单例复用。</p>
 </figure>
 
-<style>
-  .diagram {
+<style is:global>
+  .pipe-diagram {
+    container-type: inline-size;
     margin: 0;
   }
 
-  svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    font-family: var(--sl-font);
+  .pipe-diagram .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
   }
 
-  .box {
-    fill: var(--sl-color-accent-low);
-    stroke: var(--sl-color-accent);
-    stroke-width: 1.5;
+  .pipe-diagram .lane + .lane {
+    margin-top: 0.9rem;
   }
 
-  .box-fill {
-    fill: var(--sl-color-black);
-    stroke: var(--sl-color-gray-4);
-    stroke-width: 1.5;
+  .pipe-diagram header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    margin-bottom: 0.55rem;
   }
 
-  .panel {
-    fill: color-mix(in srgb, var(--sl-color-accent) 6%, transparent);
-    stroke: var(--sl-color-gray-4);
-    stroke-width: 1.5;
-    stroke-dasharray: 5 5;
-  }
-
-  .chip {
-    fill: var(--sl-color-black);
-    stroke: var(--sl-color-gray-4);
-    stroke-width: 1;
-  }
-
-  .t {
-    fill: currentColor;
-    font-size: 13.5px;
-  }
-
-  .t-sm {
-    fill: currentColor;
-    opacity: 0.72;
-    font-size: 10.5px;
-  }
-
-  .label {
-    fill: var(--sl-color-accent);
-    font-size: 12px;
+  .pipe-diagram header span {
+    font-size: 0.72rem;
     font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--sl-color-accent);
   }
 
-  .arrow {
-    fill: none;
-    stroke: var(--sl-color-accent);
-    stroke-width: 1.5;
+  .pipe-diagram header b {
+    font-family: var(--sl-font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
   }
 
-  .muted {
-    fill: currentColor;
-    opacity: 0.72;
-    font-size: 11.5px;
+  .pipe-diagram .steps {
+    display: flex;
+    gap: 0.85rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pipe-diagram .steps li {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0.55rem 0.45rem 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--sl-color-accent) 55%, var(--sl-color-gray-5));
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--sl-color-accent) 14%, var(--sl-color-black));
+    text-align: center;
+  }
+
+  .pipe-diagram .alt .steps li {
+    border-color: var(--sl-color-gray-5);
+    background: var(--sl-color-black);
+  }
+
+  .pipe-diagram .steps li strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--sl-color-white);
+  }
+
+  .pipe-diagram .steps li small {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    color: var(--sl-color-gray-3);
+  }
+
+  .pipe-diagram .steps li + li::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -0.85rem;
+    width: 0.85rem;
+    height: 2px;
+    background: var(--sl-color-accent);
+  }
+
+  .pipe-diagram .steps li + li::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 3px);
+    left: -0.28rem;
+    border: 3.5px solid transparent;
+    border-left: 5px solid var(--sl-color-accent);
+  }
+
+  .pipe-diagram .aside,
+  .pipe-diagram .foot {
+    margin: 0.55rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-3);
+  }
+
+  .pipe-diagram .after {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.85rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pipe-diagram .after li {
+    padding: 0.28rem 0.6rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    background: var(--sl-color-black);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: var(--sl-color-gray-2);
+  }
+
+  @container (max-width: 34rem) {
+    .pipe-diagram .steps {
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .pipe-diagram .steps li {
+      text-align: left;
+      padding-inline: 0.75rem;
+    }
+
+    .pipe-diagram .steps li + li::before {
+      top: -0.55rem;
+      left: 1.15rem;
+      width: 2px;
+      height: 0.55rem;
+    }
+
+    .pipe-diagram .steps li + li::after {
+      top: -0.28rem;
+      left: calc(1.15rem - 2.5px);
+      border: 3.5px solid transparent;
+      border-top: 5px solid var(--sl-color-accent);
+    }
   }
 </style>

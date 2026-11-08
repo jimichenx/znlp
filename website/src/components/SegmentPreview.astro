@@ -3,6 +3,13 @@
  * 首页右侧的分词结果卡。
  * 词和词性与 SegmentSnapshotTest 的 standard/typical 锁定结果一致，不要随手改。
  */
+interface Props {
+  /** 嵌在首屏舞台里时去掉自己的外框，和上方插画连成一块。 */
+  flush?: boolean;
+}
+
+const { flush = false } = Astro.props;
+
 const tokens = [
   ['自然', 'a'],
   ['语言', 'n'],
@@ -16,7 +23,7 @@ const tokens = [
 ];
 ---
 
-<figure class="preview">
+<figure class:list={['preview', { flush }]}>
   <figcaption class="bar">
     <span class="mark" aria-hidden="true"></span>
     <span>Znlp.segment()</span>
@@ -122,5 +129,17 @@ const tokens = [
     border-top: 1px solid var(--sl-color-gray-5);
     font-size: 0.75rem;
     color: var(--sl-color-gray-3);
+  }
+
+  .flush {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* 舞台底色固定是深海军蓝。浅色主题里 --sl-color-white 实际是深色，句子会消失。 */
+  .flush .src {
+    color: #f4f7fb;
   }
 </style>

@@ -23,9 +23,10 @@ hero:
 ---
 
 import SplitSection from '../../components/SplitSection.astro';
+import CapabilityGrid from '../../components/CapabilityGrid.astro';
 import PipelineDiagram from '../../components/diagrams/PipelineDiagram.astro';
 import PerceptronDiagram from '../../components/diagrams/PerceptronDiagram.astro';
-import { Card, CardGrid, Code, LinkButton, LinkCard } from '@astrojs/starlight/components';
+import { CardGrid, Code, LinkButton, LinkCard } from '@astrojs/starlight/components';
 
 <div class="landing">
 
@@ -35,36 +36,7 @@ import { Card, CardGrid, Code, LinkButton, LinkCard } from '@astrojs/starlight/c
 
 分词、标注、拼音和结构化解析可以单独调用。要换切分路径时，用配方把阶段拼起来。
 
-<div class="grid-features">
-
-<CardGrid>
-  <Card title="可组合的分词配方" icon="puzzle">
-    词典与二元语法是默认路径。需要时再接上感知机分词或用户词典。
-    <a class="more" href="guides/segmentation/">中文分词</a>
-  </Card>
-  <Card title="感知机统一框架" icon="approve-check">
-    分词、词性、实体、人名和拼音切分共用一套模型，可以用自己的语料替换。
-    <a class="more" href="guides/perceptron/">感知机框架</a>
-  </Card>
-  <Card title="结构化解析" icon="clock">
-    抽出数字、金额、时间和电话。相对时间按给定的参考时间归一。
-    <a class="more" href="guides/duckling/">Duckling</a>
-  </Card>
-  <Card title="拼音与繁简" icon="translate">
-    全拼、首字母、音节切分，以及简体和繁体的双向转换。
-    <a class="more" href="guides/pinyin/">拼音</a>
-  </Card>
-  <Card title="新词发现与高亮" icon="star">
-    用互信息和信息熵找新词。搜索结果可以按拼音或模糊匹配标红。
-    <a class="more" href="guides/new-word-discovery/">新词发现</a>
-  </Card>
-  <Card title="离线也能部署" icon="setting">
-    配置和组件生命周期集中管理。资源可以自动下载，也可以完全离线分发。
-    <a class="more" href="deployment/configuration/">配置与数据目录</a>
-  </Card>
-</CardGrid>
-
-</div>
+<CapabilityGrid />
 
 </div>
 

@@ -48,14 +48,17 @@
     --sl-content-width: min(86rem, 100% - 4rem);
   }
 
-  /* 首页栅格：宽屏下增加列数，卡片不会因为内容区变宽而被拉得过长 */
-  .grid-features .card-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .grid-deploy .card-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+}
+
+.landing-block {
+  margin-top: 3.25rem;
+}
+
+.sl-markdown-content .cap-grid .copy {
+  margin: 0;
 }
 
 .landing-block > h2 {
@@ -68,49 +71,6 @@
   margin-top: 0;
   margin-bottom: 1.15rem;
   color: var(--sl-color-gray-2);
-}
-
-.grid-features {
-  margin-top: 0.25rem;
-}
-
-.grid-features .card {
-  position: relative;
-  border-radius: 0.75rem;
-  padding: 1.15rem 1.25rem 1.2rem;
-  --sl-card-border: var(--sl-color-accent);
-  --sl-card-bg: var(--sl-color-accent-low);
-  transition: border-color 0.15s ease;
-}
-
-.grid-features .card:hover {
-  border-color: var(--sl-color-accent);
-}
-
-.grid-features .card .body {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--sl-color-gray-2);
-}
-
-.grid-features .card .body p {
-  margin: 0;
-}
-
-.grid-features .card .more {
-  display: flex;
-  width: fit-content;
-  margin-top: 0.85rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--sl-color-accent);
-  text-decoration: none;
-}
-
-.grid-features .card .more::after {
-  content: '';
-  position: absolute;
-  inset: 0;
 }
 
 .grid-deploy {
