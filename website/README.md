@@ -71,11 +71,10 @@ ossutil cp -r dist/ oss://<bucket>/ --update
 
 ### 与仓库相关的链接
 
-当前没有配置 `social` 和 `editLink`。原因是 `github.com/zaprt/znlp` 并不存在（404），而真实代码库在 `codeup.aliyun.com/zaprt/znlp`，匿名访问会跳到登录页，没有可公开浏览的文件页面。与其在站上挂死链，不如先不挂。将来如果建了 GitHub 公开镜像或 codeup 开放了匿名浏览，在 `astro.config.mjs` 里补回：
+页眉右上角的 GitHub 入口来自 `astro.config.mjs` 的 `social`，由 `src/components/SocialIcons.astro` 渲染成图标加仓库地址 `jimichenx/znlp`，链到 `https://github.com/jimichenx/znlp`。还没有配置 `editLink`（页脚「编辑此页」）。如果要补：
 
 ```js
-social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/<org>/<repo>' }],
-editLink: { baseUrl: 'https://github.com/<org>/<repo>/edit/main/website/' },
+editLink: { baseUrl: 'https://github.com/jimichenx/znlp/edit/main/website/' },
 ```
 
 ## 内容约定

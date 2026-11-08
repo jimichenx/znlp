@@ -1,0 +1,41 @@
+---
+import config from 'virtual:starlight/user-config';
+import { Icon } from '@astrojs/starlight/components';
+
+const links = config.social || [];
+---
+
+{
+	links.length > 0 && (
+		<>
+			{links.map(({ label, href, icon }) => (
+				<a {href} rel="me" class="sl-flex repo-link">
+					<Icon name={icon} size="1.15em" />
+					<span>{label}</span>
+				</a>
+			))}
+		</>
+	)
+}
+
+<style>
+	a {
+		align-items: center;
+		gap: 0.4rem;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		font-weight: 500;
+		line-height: 1;
+		text-decoration: none;
+		padding: 0.35rem 0.15rem;
+		white-space: nowrap;
+	}
+
+	a:hover {
+		color: var(--sl-color-white);
+	}
+
+	span {
+		font-variant-numeric: tabular-nums;
+	}
+</style>

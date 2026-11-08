@@ -19,8 +19,13 @@ export default defineConfig({
       locales: {
         root: { label: '简体中文', lang: 'zh-CN' },
       },
-      // 暂不配置 social / editLink：代码库在 codeup.aliyun.com（匿名访问会跳登录页），
-      // 没有可公开浏览的仓库页面。等有了公开镜像再补，避免站上出现 404 链接。
+      social: [
+        {
+          icon: 'github',
+          label: 'jimichenx/znlp',
+          href: 'https://github.com/jimichenx/znlp',
+        },
+      ],
       sidebar: [
         {
           label: '开始使用',
@@ -73,6 +78,7 @@ export default defineConfig({
       customCss: ['./src/styles/custom.css'],
       components: {
         Hero: './src/components/Hero.astro',
+        SocialIcons: './src/components/SocialIcons.astro',
       },
     }),
   ],
